@@ -4,7 +4,7 @@
 
 resource "aws_lb" "alb_internal" {
   count              = "${var.alb_internal_enabled}"
-  name               = "alb-int-${local.kubernetes_cluster_name_hash}"
+  name               = "alb-int-${local.cluster_name_hash}"
   load_balancer_type = "application"
   internal           = true
   idle_timeout       = 180
@@ -67,8 +67,8 @@ resource "aws_lb_listener" "alb_internal" {
 
 resource "aws_lb_target_group" "alb_internal" {
   count                = "${var.alb_internal_enabled}"
-  name                 = "alb-int-${local.kubernetes_cluster_name_hash}"
-  port                 = 30080
+  name                 = "alb-int-${local.cluster_name_hash}"
+  port                 = "${var.kubernetes_ingress_port}"
   protocol             = "HTTP"
   vpc_id               = "${data.aws_vpc.kops_vpc.id}"
   deregistration_delay = 30
